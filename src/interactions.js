@@ -12,12 +12,16 @@ export class Interactions {
     this.lighting = lighting;
     document.addEventListener("keydown", (e) => {
       if (e.code === "KeyE" && !e.repeat && player.enabled) {
-        this.update();
-        if (!this.target) return;
-        if (this.target.type === "switch") lighting.toggleLights();
-        else apartment.toggleDoor(this.target);
+        this.activate();
       }
     });
+  }
+  activate() {
+    if (!this.player.enabled) return;
+    this.update();
+    if (!this.target) return;
+    if (this.target.type === "switch") this.lighting.toggleLights();
+    else this.apartment.toggleDoor(this.target);
   }
   update() {
     if (!this.player.enabled) {
@@ -35,10 +39,18 @@ export class Interactions {
       break;
     }
     this.hint.hidden = !this.target;
+    const button = document.querySelector("#touch-action");
+    if (button) button.disabled = !this.target;
     if (this.target)
       this.hint.textContent =
         this.target.type === "switch"
           ? `E — ${this.lighting.internalOn ? "Spegni" : "Accendi"} le luci`
           : `E — ${this.target.open ? "Chiudi" : "Apri"} ${this.target.entrance ? "la porta d’ingresso" : "porta"}`;
+    if (this.target && this.player.touchMode) {
+      this.hint.textContent = this.hint.textContent.replace("E — ", "");
+      if (button) button.textContent = this.target.type === "switch"
+        ? (this.lighting.internalOn ? "Spegni" : "Accendi")
+        : (this.target.open ? "Chiudi" : "Apri");
+    } else if (button) button.textContent = "Interagisci";
   }
 }

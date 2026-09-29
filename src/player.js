@@ -9,10 +9,12 @@ export class Player {
     this.pitch = 0;
     this.velocity = new T.Vector2();
     this.enabled = false;
+    this.touchMode = matchMedia("(pointer: coarse)").matches;
+    this.touchMove = new T.Vector2();
     this.reset();
     document.addEventListener("keydown", (e) => {
       if (e.code === "Escape" && this.enabled) {
-        document.exitPointerLock();
+        this.pause();
         return;
       }
       if (
@@ -35,15 +37,19 @@ export class Player {
       this.keys.add(e.code);
     });
     document.addEventListener("keyup", (e) => this.keys.delete(e.code));
-    window.addEventListener("blur", () => this.keys.clear());
+    window.addEventListener("blur", () => this.pause());
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) this.pause();
+    });
     document.addEventListener("pointerlockchange", () => {
+      if (this.touchMode) return;
       this.enabled = document.pointerLockElement === canvas;
       this.keys.clear();
       this.velocity.set(0, 0);
       this.onLockChange?.(this.enabled);
     });
     document.addEventListener("mousemove", (e) => {
-      if (!this.enabled) return;
+      if (!this.enabled || this.touchMode) return;
       this.yaw -= e.movementX * 0.0018;
       this.pitch = T.MathUtils.clamp(
         this.pitch - e.movementY * 0.0018,
@@ -64,6 +70,11 @@ export class Player {
     this.orient();
   }
   async lock() {
+    if (this.touchMode) {
+      this.enabled = true;
+      this.onLockChange?.(true);
+      return;
+    }
     try {
       await this.canvas.requestPointerLock();
     } catch (e) {
@@ -72,16 +83,27 @@ export class Player {
       );
     }
   }
+  pause() {
+    this.keys.clear();
+    this.touchMove.set(0, 0);
+    this.velocity.set(0, 0);
+    this.clearTouch?.();
+    if (document.pointerLockElement === this.canvas) document.exitPointerLock();
+    if (this.enabled) {
+      this.enabled = false;
+      this.onLockChange?.(false);
+    }
+  }
   update(dt) {
     if (!this.enabled) return;
     const k = this.keys,
       x =
         Number(k.has("KeyD") || k.has("ArrowRight")) -
-        Number(k.has("KeyA") || k.has("ArrowLeft")),
+        Number(k.has("KeyA") || k.has("ArrowLeft")) + this.touchMove.x,
       z =
         Number(k.has("KeyS") || k.has("ArrowDown")) -
-        Number(k.has("KeyW") || k.has("ArrowUp"));
-    const len = Math.hypot(x, z) || 1,
+        Number(k.has("KeyW") || k.has("ArrowUp")) + this.touchMove.y;
+    const len = Math.max(1, Math.hypot(x, z)),
       speed = k.has("ShiftLeft") || k.has("ShiftRight") ? 3.25 : 1.8;
     this.velocity.x = T.MathUtils.damp(
       this.velocity.x,

@@ -9,6 +9,7 @@ import { ROOMS, roomAt } from "./layout.js";
 import { furnish } from "./furniture.js";
 import { batchStatic } from "./batching.js";
 import { addAmbience } from "./ambience.js";
+import { setupTouch } from "./touch.js";
 const $ = (s) => document.querySelector(s);
 try {
   const lighting = createScene($("#viewport")),
@@ -29,6 +30,11 @@ try {
     lighting,
   );
   let started = false;
+  setupTouch(player, interaction);
+  if (player.touchMode) {
+    lighting.quality("low");
+    $("#quality").value = "low";
+  }
   player.onLockChange = (locked) => {
     if (locked) started = true;
     $("#overlay").hidden = locked;
@@ -45,7 +51,7 @@ try {
     if (started && !player.enabled) player.lock();
   };
   $("#menu-button").onclick = () => {
-    if (player.enabled) document.exitPointerLock();
+    if (player.enabled) player.pause();
     else {
       started = true;
       player.onLockChange(false);

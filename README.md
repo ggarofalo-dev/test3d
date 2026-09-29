@@ -23,6 +23,10 @@ Apri `http://localhost:8000`. Il server serve soltanto per l'anteprima: su GitHu
 
 ## Comandi
 
-Premi **ENTRA**, usa WASD e mouse per muoverti, Shift per accelerare, E per porte e interruttori ed Esc per il menu. Il menu include giorno/notte, qualità grafica, reset e piantina. Richiede un browser desktop con WebGL e tastiera/mouse.
+Su PC premi **ENTRA**, usa WASD e mouse per muoverti, Shift per accelerare, E per porte e interruttori ed Esc per il menu.
+
+Su smartphone e tablet premi **ENTRA**, muoviti con il joystick in basso a sinistra e trascina sul resto della scena per guardarti intorno. Puoi usare le due dita contemporaneamente. Punta una porta o un interruttore con il mirino e tocca il pulsante in basso a destra. Tocca **Menu** per mettere in pausa. I controlli si azzerano quando lasci la pagina o ruoti lo schermo.
+
+Il menu include giorno/notte, qualità grafica, reset e piantina. Su dispositivi con puntatore touch principale viene selezionata inizialmente la qualità Essenziale, modificabile dal menu. Sono supportati orientamento verticale e orizzontale. Richiede WebGL; le prestazioni dipendono dal dispositivo.
 
 Questa è una copia indipendente del progetto: le modifiche ai file della versione principale non si propagano automaticamente qui.
