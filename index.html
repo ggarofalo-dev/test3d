@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#252d27" />
+    <title>Abitare — Visita virtuale</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main
+      id="viewport"
+      aria-label="Ricostruzione tridimensionale dell’appartamento"
+    ></main>
+    <div class="brand">
+      <span class="brand-mark">a.</span
+      ><span>ABITARE<small>SPAZI DA VIVERE</small></span>
+    </div>
+    <div id="top-info">
+      <span class="status-dot"></span
+      ><span id="mode-label">Luce del giorno</span
+      ><button id="menu-button" aria-label="Apri menu">
+        Menu <kbd>ESC</kbd>
+      </button>
+    </div>
+    <section id="overlay" class="overlay">
+      <div class="intro">
+        <div class="eyebrow">UN PUNTO DI VISTA DIVERSO</div>
+        <h1>La tua casa.<br /><em>Da dentro.</em></h1>
+        <p id="intro-text">Visita virtuale dell’appartamento</p>
+        <p class="intro-description">
+          La luce, i materiali, le proporzioni.<br />Esplora ogni stanza, al tuo
+          passo.
+        </p>
+        <button id="enter" class="primary">ENTRA <span>↗</span></button>
+        <div class="intro-meta">
+          6 ambienti <i></i> Scala reale <i></i> Prima persona
+        </div>
+      </div>
+      <div class="pause-panel" hidden>
+        <div class="eyebrow">IL TUO PUNTO DI VISTA</div>
+        <h2>Prenditi il tuo tempo.</h2>
+        <button id="resume" class="primary">
+          Riprendi la visita <span>↗</span>
+        </button>
+        <div class="setting">
+          <span>Atmosfera</span><button id="day-night">Giorno / Notte</button>
+        </div>
+        <label class="setting"
+          >Qualità grafica<select id="quality">
+            <option value="high">Alta</option>
+            <option value="medium" selected>Bilanciata</option>
+            <option value="low">Essenziale</option>
+          </select></label
+        ><button id="reset" class="text-button">↺ Torna all’ingresso</button
+        ><button id="plan-button" class="text-button">
+          ⌑ Consulta la piantina originale
+        </button>
+        <p class="small-note">
+          Le misure scritte guidano la geometria; il disegno guida disposizione
+          e finiture.
+        </p>
+      </div>
+      <div class="intro-footer">
+        <span>RICOSTRUITO DALLA TUA PIANTINA</span>
+        <div>
+          <kbd>W A S D</kbd> Muoviti <kbd>MOUSE</kbd> Guarda
+          <kbd>E</kbd> Interagisci
+        </div>
+        <span>01 — APPARTAMENTO</span>
+      </div>
+    </section>
+    <div id="hud" hidden>
+      <div id="crosshair"></div>
+      <div id="interaction" hidden></div>
+      <div class="room-card">
+        <span class="eyebrow">TI TROVI IN</span
+        ><strong id="room-name">Salone</strong
+        ><span id="room-size">40 m² · 8 × 5 m</span>
+      </div>
+      <div class="controls-hint">
+        <kbd>WASD</kbd> Muoviti <kbd>SHIFT</kbd> Accelera
+        <kbd>E</kbd> Interagisci
+      </div>
+      <canvas
+        id="minimap"
+        width="260"
+        height="260"
+        aria-label="Posizione nell’appartamento"
+      ></canvas>
+    </div>
+    <dialog id="plan-dialog">
+      <button id="close-plan" aria-label="Chiudi piantina">×</button
+      ><img src="piantina.png" alt="Piantina originale dell’appartamento" />
+      <p>
+        Piantina di riferimento · Le quote indicate prevalgono sulle proporzioni
+        dell’illustrazione.
+      </p>
+    </dialog>
+    <div id="loading">Preparazione degli spazi…</div>
+    <div id="error" hidden role="alert"></div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
